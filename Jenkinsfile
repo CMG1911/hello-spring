@@ -4,26 +4,21 @@ pipeline {
 	ansiColor('xterm')	
 	}
     stages {
-            stage('Compilación') {
-		steps {
-                        sh './mvnw package'
+        stage('TestingDocker') {
+		    steps {
+                sh 'docker-compose config'
                 }
             }
-            stage('Tests') {
-		steps {
-                        junit 'target/surefire-reports/TEST-*.xml'
-                }
-            }
-            stage('TestingDocker') {
-		steps {
-                        sh 'docker-compose config'
-                }
-            }
-            stage('Construcción') {
+            stage('Compilación y Construcción') {
                 steps {
-                       sh 'docker-compose build'
+                       sh '''./mvnw package
+                       docker-compose build'''
                     }
-                
+            }
+            post {
+                  always {
+                    junit 'target/surefire-reports/*.xml'
+                  }
             }
 	        stage('Levantamiento') {
                 steps {
