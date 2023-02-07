@@ -16,8 +16,9 @@ pipeline {
         }
         stage('Levantamiento') {
             steps {
-                sh 'docker-compose up -d docker-compose logs -t --tail=10'
-                echo '\033[1;32m[Success] \033[0m'
+                sh '''docker-compose up -d 
+                docker-compose logs -t --tail=10'''
+                 echo '\033[1;32m[Success] \033[0m'
             }
         }
     
